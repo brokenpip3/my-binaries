@@ -1,0 +1,30 @@
+name: CI
+
+concurrency:
+  group: "tests"
+  cancel-in-progress: false
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, ready_for_review, reopened]
+
+jobs:
+  tests-and-build:
+    if: github.event.pull_request.draft == false
+    name: tests
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        test: ["build"]
+    steps:
+    - uses: DeterminateSystems/nix-installer-action@v13
+      with:
+        diagnostic-endpoint: ""
+    - name: Check out code
+      uses: actions/checkout@v4
+    - name: Test ${{ matrix.test }}
+      run: nix develop . --command justfile ${{ matrix.test }}
