@@ -27,4 +27,4 @@ jobs:
     - name: Check out code
       uses: actions/checkout@v4
     - name: Test ${{ matrix.test }}
-      run: nix develop . --command justfile ${{ matrix.test }}
+      run: nix develop . --command just ${{ matrix.test }}
