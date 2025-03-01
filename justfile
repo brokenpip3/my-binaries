@@ -30,12 +30,20 @@ clean-git:
 pre-commit:
     pre-commit install
 
-# Build all packages
-build:
+# Build category security
+build-security:
     nix build -L .#util_pass_bitwarden
+
+build-privacy:
     nix build -L .#util_privacy_telegram_cleanup
+
+build-productivity:
     nix build -L .#task-sync-lib
 
+# Build all packages
+build: build-security build-privacy build-productivity
+
+# Lint with ruff
 lint:
     ruff check .
     ruff format .

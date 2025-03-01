@@ -19,7 +19,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        test: ["build"]
+        test: ["build-security", "build-privacy", "build-productivity"]
     steps:
     - uses: DeterminateSystems/nix-installer-action@v13
       with:
@@ -27,4 +27,4 @@ jobs:
     - name: Check out code
       uses: actions/checkout@v4
     - name: Test ${{ matrix.test }}
-      run: nix develop . --command justfile ${{ matrix.test }}
+      run: nix develop . --command just ${{ matrix.test }}

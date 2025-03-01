@@ -1,8 +1,8 @@
 # Task Sync Library
 
-This is my personal, ugly yet functional task sync library.
+This is my personal, ugly yet functional "task sync" library.
 
-While I respect the bugwarrior philosophy I want to have something that will pull but also keep in sync other systems with taskwarrior.
+While I respect the [bugwarrior](https://github.com/GothenburgBitFactory/bugwarrior) philosophy I want something different, a flow that will not only pull tasks from different sources but also keep them in sync.
 
 ## Integrations
 
@@ -26,12 +26,21 @@ Properties supported (both ways):
 Pre-requisites:
 
 - Logseq API enabled and token created
-- ENV variables (check `util_task_youtrack_sync.py`)
+- ENV variables (check `_logseq.py`):
 - The following uda fields in taskwarrior:
 ```bash
 logseq_id      string Logseq ID
 logseq_page    string Logseq Page
 logseq_uuid    string Logseq UUID
+```
+which can be added with the following config in taskrc:
+```
+uda.logseq_id.type=string
+uda.logseq_uuid.type=string
+uda.logseq_page.type=string
+uda.logseq_id.label=Logseq ID
+uda.logseq_uuid.label=Logseq UUID
+uda.logseq_page.label=Logseq Page
 ```
 
 ### YouTrack
@@ -46,16 +55,27 @@ Properties supported (both ways):
 - Status (done, todo, doing)
 - Card ID (Read only)
 - Description
-- Card raw id and state id (Read only, neeeed for updates)
+- Card raw id and state id (Read only, necessary for card updates)
 
 Pre-requisites:
 
 - A youtrack token
 - ENV variables (check `youtrack.py`)
+```
+TASKSYNC_YOUTRACK_URL
+TASKSYNC_YOUTRACK_TOKEN
+```
 - The following uda fields in taskwarrior:
 ```bash
 youtrack       string YouTrack ID
 youtrack_rawid string YouTrack Raw ID
+```
+which can be added with the following config in taskrc:
+```
+uda.youtrack.type=string
+uda.youtrack.label=YouTrack ID
+uda.youtrack_rawid.type=string
+uda.youtrack_rawid.label=YouTrack Raw ID
 ```
 
 ## home-manager integration

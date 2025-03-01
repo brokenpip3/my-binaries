@@ -1,3 +1,0 @@
-# Security
-
-## Pass bitwarden sync
