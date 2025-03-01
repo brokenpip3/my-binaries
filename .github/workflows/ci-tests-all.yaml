@@ -21,7 +21,7 @@ jobs:
       matrix:
         test: ["build-security", "build-privacy", "build-productivity"]
     steps:
-    - uses: DeterminateSystems/nix-installer-action@v13
+    - uses: DeterminateSystems/nix-installer-action@v16
       with:
         diagnostic-endpoint: ""
     - name: Check out code
