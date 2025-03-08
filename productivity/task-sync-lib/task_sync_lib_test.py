@@ -2,7 +2,7 @@ from unittest.mock import patch, MagicMock
 import json
 import requests
 import subprocess
-from logseq import (
+from _logseq import (
     grab_todos_from_logseq,
     extract_priority,
     extract_marker,
@@ -33,7 +33,7 @@ GENERIC_TODO = {
 
 
 def test_grab_todos_from_logseq():
-    with patch("logseq.requests.post") as mock_post:
+    with patch("_logseq.requests.post") as mock_post:
         mock_response = MagicMock()
         mock_response.json.return_value = [GENERIC_TODO]
         mock_response.raise_for_status = MagicMock()
@@ -45,7 +45,7 @@ def test_grab_todos_from_logseq():
 
 
 def test_fetch_existing_tasks():
-    with patch("logseq.subprocess.run") as mock_run:
+    with patch("_logseq.subprocess.run") as mock_run:
         mock_run.return_value.stdout = json.dumps([{"id": "1", "project": "test"}])
         tasks = fetch_existing_tasks()
         assert len(tasks) == 1
@@ -183,12 +183,12 @@ def test_extract_marker_variations():
 
 
 def test_main_function_skip_existing_task():
-    with patch("logseq.fetch_existing_tasks") as mock_fetch:
+    with patch("_logseq.fetch_existing_tasks") as mock_fetch:
         mock_fetch.return_value = [{"logseq_uuid": "rtr-3433-ddsds-121"}]
-        with patch("logseq.grab_todos_from_logseq") as mock_grab:
+        with patch("_logseq.grab_todos_from_logseq") as mock_grab:
             mock_grab.return_value = [GENERIC_TODO]
 
-            with patch("logseq.subprocess.run") as mock_run:
+            with patch("_logseq.subprocess.run") as mock_run:
                 result = mock_run.return_value
                 result.returncode = 0
                 main()
@@ -197,7 +197,7 @@ def test_main_function_skip_existing_task():
 
 
 def test_create_logseq_todo_success():
-    with patch("logseq.requests.post") as mock_post:
+    with patch("_logseq.requests.post") as mock_post:
         mock_response = MagicMock()
         mock_response.json.return_value = {"uuid": "new-task-uuid"}
         mock_response.raise_for_status = MagicMock()
@@ -208,7 +208,7 @@ def test_create_logseq_todo_success():
 
 
 def test_create_logseq_todo_failure():
-    with patch("logseq.requests.post") as mock_post:
+    with patch("_logseq.requests.post") as mock_post:
         mock_response = MagicMock()
         mock_response.raise_for_status.side_effect = requests.exceptions.HTTPError(
             "Error"
@@ -319,38 +319,38 @@ def test_remove_unwanted_various_formats():
 
 
 def test_fetch_existing_tasks_empty_output():
-    with patch("logseq.subprocess.run") as mock_run:
+    with patch("_logseq.subprocess.run") as mock_run:
         mock_run.return_value.stdout = ""
         tasks = fetch_existing_tasks()
         assert len(tasks) == 0
 
 
 def test_main_function_add_task():
-    with patch("logseq.fetch_existing_tasks") as mock_fetch:
+    with patch("_logseq.fetch_existing_tasks") as mock_fetch:
         mock_fetch.return_value = []
-        with patch("logseq.grab_todos_from_logseq") as mock_grab:
+        with patch("_logseq.grab_todos_from_logseq") as mock_grab:
             mock_grab.return_value = [GENERIC_TODO]
 
-            with patch("logseq.subprocess.run") as mock_run:
+            with patch("_logseq.subprocess.run") as mock_run:
                 mock_run.return_value.returncode = 0
                 main()
                 mock_run.assert_called_once()
 
 
 def test_main_function_with_translation_error():
-    with patch("logseq.fetch_existing_tasks") as mock_fetch:
+    with patch("_logseq.fetch_existing_tasks") as mock_fetch:
         mock_fetch.return_value = []
-        with patch("logseq.grab_todos_from_logseq") as mock_grab:
+        with patch("_logseq.grab_todos_from_logseq") as mock_grab:
             mock_grab.return_value = [GENERIC_TODO]
 
-            with patch("logseq.subprocess.run") as mock_run:
+            with patch("_logseq.subprocess.run") as mock_run:
                 mock_run.return_value.returncode = 1
                 main()
                 mock_run.assert_called_once()
 
 
 def test_update_logseq_todo_success():
-    with patch("logseq.requests.post") as mock_post:
+    with patch("_logseq.requests.post") as mock_post:
         mock_response = MagicMock()
         mock_response.raise_for_status = MagicMock()
         mock_response.json.return_value = {}
@@ -361,7 +361,7 @@ def test_update_logseq_todo_success():
 
 
 def test_update_logseq_todo_failure():
-    with patch("logseq.requests.post") as mock_post:
+    with patch("_logseq.requests.post") as mock_post:
         mock_response = MagicMock()
         mock_response.raise_for_status.side_effect = requests.exceptions.HTTPError(
             "Error"
@@ -381,7 +381,7 @@ def test_extract_project_from_content_invalid_format():
 
 
 def test_fetch_existing_tasks_error_handling():
-    with patch("logseq.subprocess.run") as mock_run:
+    with patch("_logseq.subprocess.run") as mock_run:
         mock_run.side_effect = subprocess.CalledProcessError(1, "task")
         tasks = fetch_existing_tasks()
         assert len(tasks) == 0
