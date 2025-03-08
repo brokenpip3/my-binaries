@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from logseq import (
+from _logseq import (
     setup_logging,
     fetch_existing_tasks,
     grab_todos_from_logseq,

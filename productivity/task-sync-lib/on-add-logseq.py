@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from logseq import create_logseq_todo, translate_taskwarrior, setup_logging
+from _logseq import create_logseq_todo, translate_taskwarrior, setup_logging
 
 import sys
 import json
