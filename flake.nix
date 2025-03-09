@@ -46,6 +46,7 @@
           util_pass_bitwarden = pythonScriptGenPackage pkgConfig.util_pass_bitwarden pkgs;
           util_privacy_telegram_cleanup = pythonScriptGenPackage pkgConfig.util_privacy_telegram_cleanup pkgs;
           task-sync-lib = pythonScriptGenPackage pkgConfig.task-sync-lib pkgs;
+          tartufi = pythonScriptGenPackage pkgConfig.tartufi pkgs;
         };
 
         devShells.default = pkgs.mkShell {
