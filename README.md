@@ -4,11 +4,13 @@
 
 This repo contains a collection of binaries, scripts, amenities that I use on a daily basis and created over time.
 
-Each of them can be installed easily with nix (with the dependencies managed) or copied them (without the dependencies managed).
-
 The binaries are written mostly in python/bash and also most of them have tests with a good coverage.
 
 The repo is heavily under development and I will add more binaries that I built over time when I have time to clean them up and make them public.
+
+## Installation
+
+Each of them can be installed easily with nix (with the dependencies managed) or copied them (without the dependencies managed).
 
 ## Naming convention
 

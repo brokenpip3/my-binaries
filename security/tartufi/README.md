@@ -21,7 +21,8 @@ not mandatory but you can also pass:
 it also need docker to run the trufflehog container (by default is capped to 1cpu and 2GB of memory for reasons)
 
 example output:
-```bash
+
+```
 $ nix run .#tartufi -- -u trufflesecurity
 
     ┌─────────────────────┐
