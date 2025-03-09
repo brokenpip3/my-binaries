@@ -7,6 +7,7 @@
       "bitwarden-cli"
     ];
     srcDir = "security/pass-bitwarden-sync";
+    libs = [];
     scripts = [ "bitsync.py" ];
   };
 
@@ -18,6 +19,7 @@
       "telethon"
     ];
     srcDir = "privacy/telegram-cleanup";
+    libs = [];
     scripts = [ "telegram_cleanup.py" ];
   };
 
@@ -29,10 +31,12 @@
       "requests"
     ];
     srcDir = "productivity/task-sync-lib";
-    scripts = [
+    libs = [
       "_logseq.py"
       "_tasklib.py"
       "_youtrack.py"
+    ];
+    scripts = [
       "util_task_logseq_sync.py"
       "util_task_youtrack_sync.py"
       "on-add-logseq.py"
@@ -49,6 +53,7 @@
       "requests"
     ];
     srcDir = "security/tartufi";
+    libs = [];
     scripts = [ "tartufi.py" ];
   };
 }

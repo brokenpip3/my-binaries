@@ -31,8 +31,12 @@
           '';
           installPhase = ''
             mkdir -p $out/bin
+            ${pkgs.lib.concatMapStrings (lib: ''
+              install -Dm644 ${lib} $out/bin/${builtins.baseNameOf lib}
+            '') config.libs}
             ${pkgs.lib.concatMapStrings (script: ''
-              install -Dm755 ${script} $out/bin/${builtins.baseNameOf script}
+              base_name=$(basename ${script} .py)
+              install -Dm755 ${script} $out/bin/$base_name
             '') config.scripts}
           '';
         };
