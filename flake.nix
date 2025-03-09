@@ -31,8 +31,12 @@
           '';
           installPhase = ''
             mkdir -p $out/bin
+            ${pkgs.lib.concatMapStrings (lib: ''
+              install -Dm644 ${lib} $out/bin/${builtins.baseNameOf lib}
+            '') config.libs}
             ${pkgs.lib.concatMapStrings (script: ''
-              install -Dm755 ${script} $out/bin/${builtins.baseNameOf script}
+              base_name=$(basename ${script} .py)
+              install -Dm755 ${script} $out/bin/$base_name
             '') config.scripts}
           '';
         };
@@ -46,6 +50,7 @@
           util_pass_bitwarden = pythonScriptGenPackage pkgConfig.util_pass_bitwarden pkgs;
           util_privacy_telegram_cleanup = pythonScriptGenPackage pkgConfig.util_privacy_telegram_cleanup pkgs;
           task-sync-lib = pythonScriptGenPackage pkgConfig.task-sync-lib pkgs;
+          tartufi = pythonScriptGenPackage pkgConfig.tartufi pkgs;
         };
 
         devShells.default = pkgs.mkShell {

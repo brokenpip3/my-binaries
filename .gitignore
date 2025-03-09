@@ -218,5 +218,8 @@ pyrightconfig.json
 .terraform/
 
 # nix
-
 result
+
+#sqlite
+*.db
+*.sqlite

@@ -33,6 +33,7 @@ pre-commit:
 # Build category security
 build-security:
     nix build -L .#util_pass_bitwarden
+    nix build -L .#tartufi
 
 build-privacy:
     nix build -L .#util_privacy_telegram_cleanup
