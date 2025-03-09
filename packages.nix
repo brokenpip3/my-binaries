@@ -8,7 +8,7 @@
     ];
     srcDir = "security/pass-bitwarden-sync";
     libs = [];
-    scripts = [ "util_privacy_telegram_cleanup.py" ];
+    scripts = [ "bitsync.py" ];
   };
 
   util_privacy_telegram_cleanup = {
@@ -20,7 +20,7 @@
     ];
     srcDir = "privacy/telegram-cleanup";
     libs = [];
-    scripts = [ "telegram_cleanup.py" ];
+    scripts = [ "util_privacy_telegram_cleanup.py" ];
   };
 
   task-sync-lib = {
