@@ -20,7 +20,7 @@ Based on my personal preference, I use a simple naming convention for the binari
 util-<category>-<name>-<eventual-subname>
 ```
 
-Each of them start with `util` so it is easy to find them in the terminal
+Some of them start with `util` so it is easy to find them in the terminal
 
 ## Categories
 
@@ -30,7 +30,9 @@ Each of them start with `util` so it is easy to find them in the terminal
 
 ### Privacy
 
-- [telegram-cleanup](./privacy/telegram-cleanup): cleanup your telegram account: delete all messages older than x days from groups and dms
+- [util_privacy_telegram-cleanup](./privacy/telegram-cleanup): cleanup your telegram account: delete all messages older than x days from groups and dms
+
+- [tartufi](./privacy/tartufi): simple [trufflehog](https://github.com/trufflesecurity/trufflehog) companion that will let you scan an entire docker registry organization for secrets
 
 ### Productivity
 
