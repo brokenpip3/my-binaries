@@ -10,7 +10,7 @@
     inputs.flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = inputs.nixpkgs.legacyPackages.${system};
-        pkgConfig = import ./packages.nix;
+        pkgConfig = import ./packages-python.nix;
 
         pythonScriptGenPackage = config: pkgs: pkgs.python3Packages.buildPythonApplication {
           inherit (config) pname version;
@@ -51,6 +51,7 @@
           util_privacy_telegram_cleanup = pythonScriptGenPackage pkgConfig.util_privacy_telegram_cleanup pkgs;
           task-sync-lib = pythonScriptGenPackage pkgConfig.task-sync-lib pkgs;
           tartufi = pythonScriptGenPackage pkgConfig.tartufi pkgs;
+          github-actions-hash = (import ./package-githubhash.nix { inherit pkgs; });
         };
 
         devShells.default = pkgs.mkShell {

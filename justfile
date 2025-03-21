@@ -41,8 +41,12 @@ build-privacy:
 build-productivity:
     nix build -L .#task-sync-lib
 
+# Build github-actions-hash
+build-githubhash:
+    nix build -L .#github-actions-hash
+
 # Build all packages
-build: build-security build-privacy build-productivity
+build: build-security build-privacy build-productivity build-githubhash
 
 # Lint with ruff
 lint:
