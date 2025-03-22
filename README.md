@@ -20,7 +20,7 @@ Based on my personal preference, I use a simple naming convention for the binari
 util-<category>-<name>-<eventual-subname>
 ```
 
-Some of them start with `util` so it is easy to find them in the terminal
+Some (not all) of them start with `util` so it is easy to find them in the terminal
 
 ## Categories
 
@@ -37,3 +37,9 @@ Some of them start with `util` so it is easy to find them in the terminal
 ### Productivity
 
 - [task-sync-lib](./productivity/task-sync-lib): a library to sync your tasks with different systems (logseq and youtrack atm)
+
+#### Nix
+
+- [home-manager-remote](./productivity/nix-specific/home-manager-remote): nixos-rebuild via ssh for home-manager, more on this blog [post](https://www.brokenpip3.com/posts/2024-27-06-nix-tiny-tools/#home-manager-remote)
+
+- [util_nix_doc_module](./productivity/nix-specific/util-nix-doc-module): a simple script to generate a markdown documentation for a nix module across all the files in a given directory

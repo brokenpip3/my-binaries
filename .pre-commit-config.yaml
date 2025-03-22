@@ -22,4 +22,4 @@ repos:
   rev: dd7b3821637ba3c3a8628ad487fd84edec8006f2  # frozen: 0.0.1
   hooks:
     - id: github-actions-hash
-      files: ^.github/workflows/.*\.(yml|yaml)$ # limit only to github workflows
+      files: ^.github/workflows/.*\.(yml|yaml)$

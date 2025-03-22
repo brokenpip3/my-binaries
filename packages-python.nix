@@ -56,4 +56,15 @@
     libs = [];
     scripts = [ "tartufi.py" ];
   };
+
+  util_nix_doc_module = {
+    pname = "util_nix_doc_module";
+    version = "0.1.0";
+    propagatedBuildInputs = [
+      "python3"
+    ];
+    srcDir = "productivity/nix-specific/util-nix-doc-module";
+    libs = [];
+    scripts = [ "util_nix_doc_module.py" ];
+  };
 }
