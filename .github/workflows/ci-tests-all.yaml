@@ -25,7 +25,7 @@ jobs:
     - id: matrix
       run: |
         _matrix=$(nix flake show --json --all-systems | jq -r '.packages."x86_64-linux" | keys | .[]')
-        echo "matrix=${script}" >> $GITHUB_OUTPUT
+        echo "matrix=${_matrix}" >> $GITHUB_OUTPUT
 
   tests-and-build:
     if: github.event.pull_request.draft == false
