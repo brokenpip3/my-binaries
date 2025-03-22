@@ -24,8 +24,8 @@ jobs:
     - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
     - id: matrix
       run: |
-        _matrix=$(nix flake show --json --all-systems | jq -r '.packages."x86_64-linux" | keys')
-        echo "matrix=${_matrix}" >> $GITHUB_OUTPUT
+        nix flake show --json --all-systems | jq -r '.packages."x86_64-linux" | keys' > _temp
+        echo "matrix=$(cat _temp)" >> $GITHUB_OUTPUT
 
   tests-and-build:
     if: github.event.pull_request.draft == false
