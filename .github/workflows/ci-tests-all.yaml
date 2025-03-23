@@ -24,7 +24,8 @@ jobs:
     - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
     - id: matrix
       run: |
-        nix flake show --json --all-systems | jq -r '.packages."x86_64-linux" | keys' > _temp
+        nix flake show --json --all-systems | jq -cr '.packages."x86_64-linux" | keys' > _temp
+        echo $(cat _temp)
         echo "matrix=$(cat _temp)" >> $GITHUB_OUTPUT
 
   tests-and-build:
