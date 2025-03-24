@@ -12,14 +12,31 @@ on:
     types: [opened, synchronize, ready_for_review, reopened]
 
 jobs:
+  create-matrix:
+    runs-on: ubuntu-latest
+    name: create package matrix
+    outputs:
+      matrix: ${{ steps.matrix.outputs.matrix }}
+    steps:
+    - uses: DeterminateSystems/nix-installer-action@e50d5f73bfe71c2dd0aa4218de8f4afa59f8f81d # v16
+      with:
+        diagnostic-endpoint: ""
+    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+    - id: matrix
+      run: |
+        nix flake show --json --all-systems | jq -cr '.packages."x86_64-linux" | keys' > _temp
+        echo $(cat _temp)
+        echo "matrix=$(cat _temp)" >> $GITHUB_OUTPUT
+
   tests-and-build:
     if: github.event.pull_request.draft == false
+    needs: [create-matrix]
     name: tests
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        test: ["build-security", "build-privacy", "build-productivity"]
+        test: ${{ fromJSON(needs.create-matrix.outputs.matrix) }}
     steps:
     - uses: DeterminateSystems/nix-installer-action@e50d5f73bfe71c2dd0aa4218de8f4afa59f8f81d # v16
       with:
@@ -27,4 +44,4 @@ jobs:
     - name: Check out code
       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
     - name: Test ${{ matrix.test }}
-      run: nix develop . --command just ${{ matrix.test }}
+      run: nix build -L .#${{ matrix.test }}
