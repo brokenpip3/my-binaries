@@ -32,7 +32,7 @@ Some (not all) of them start with `util` so it is easy to find them in the termi
 
 - [util_privacy_telegram-cleanup](./privacy/telegram-cleanup): cleanup your telegram account: delete all messages older than x days from groups and dms
 
-- [tartufi](./privacy/tartufi): simple [trufflehog](https://github.com/trufflesecurity/trufflehog) companion that will let you scan an entire docker registry organization for secrets
+- [tartufi](./security/tartufi): simple [trufflehog](https://github.com/trufflesecurity/trufflehog) companion that will let you scan an entire docker registry organization for secrets
 
 ### Productivity
 
