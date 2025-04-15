@@ -56,3 +56,13 @@ def update_youtrack_issue(issue_id: str, state_id: str, new_state: str) -> bool:
     except requests.exceptions.RequestException as e:
         logging.error(f"failed to update youtrack issue {issue_id}: {e}")
         return False
+
+def get_states_from_env(var_name: str, default: list[str]) -> list[str]:
+    return os.getenv(var_name, ",".join(default)).split(",")
+
+def update_with_retry(issue_id: str, state_id: str, states: list[str]) -> None:
+    for state in states:
+        if update_youtrack_issue(issue_id, state_id, state):
+            logging.info(f"updated issue {issue_id} to state {state}")
+            return
+        logging.warning(f"failed to update issue {issue_id} to state {state}, trying next")
