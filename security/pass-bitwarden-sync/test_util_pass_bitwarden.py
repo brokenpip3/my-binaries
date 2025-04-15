@@ -3,7 +3,7 @@
 
 import pytest
 from unittest.mock import patch, MagicMock
-from bitsync import (
+from util_pass_bitwarden import (
     verify_bitwarden_binary,
     authenticate_bitwarden,
     fetch_pass_entries,
@@ -21,7 +21,7 @@ def mock_subprocess_run():
 
 @pytest.fixture
 def mock_getpass():
-    with patch("bitsync.getpass") as mock_getpass:
+    with patch("util_pass_bitwarden.getpass") as mock_getpass:
         yield mock_getpass
 
 
