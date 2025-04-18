@@ -2,7 +2,11 @@ import pytest
 from unittest.mock import patch, MagicMock, AsyncMock
 from datetime import datetime, timedelta, timezone
 from telethon.tl.types import PeerChannel
-from util_privacy_telegram_cleanup import get_api_credentials, delete_old_messages, parse_args
+from util_privacy_telegram_cleanup import (
+    get_api_credentials,
+    delete_old_messages,
+    parse_args,
+)
 
 MOCK_API_ID = 5489987
 MOCK_CHAT_ID = 1001
@@ -66,9 +70,9 @@ def test_get_api_credentials():
 
 @pytest.mark.asyncio
 async def test_delete_old_messages_interactive(mock_client):
-    with patch("util_privacy_telegram_cleanup.TelegramClient", return_value=mock_client), patch(
-        "builtins.input", side_effect=["group", "1", "yes", "no"]
-    ):
+    with patch(
+        "util_privacy_telegram_cleanup.TelegramClient", return_value=mock_client
+    ), patch("builtins.input", side_effect=["group", "1", "yes", "no"]):
         await delete_old_messages(
             chat_ids=[],
             interactive=True,

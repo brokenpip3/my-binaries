@@ -7,9 +7,12 @@ import logging
 from _tasklib import setup_logging
 from _youtrack import get_states_from_env, update_with_retry
 
+
 def main():
     setup_logging()
-    in_progress_states = get_states_from_env("TASKSYNC_YOUTRACK_INPROGRESS_STATE", ["In Progress"])
+    in_progress_states = get_states_from_env(
+        "TASKSYNC_YOUTRACK_INPROGRESS_STATES", ["In Progress"]
+    )
     done_states = get_states_from_env("TASKSYNC_YOUTRACK_DONE_STATES", ["Done"])
     task_input = sys.stdin.read().strip()
     logging.debug(f"received input: {task_input}")
@@ -40,6 +43,7 @@ def main():
 
     print(json.dumps(modified_task))
     sys.exit(0)
+
 
 if __name__ == "__main__":
     main()
