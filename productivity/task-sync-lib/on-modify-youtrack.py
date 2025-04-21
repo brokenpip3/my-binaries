@@ -5,11 +5,15 @@ import sys
 import json
 import logging
 from _tasklib import setup_logging
-from _youtrack import update_youtrack_issue
+from _youtrack import get_states_from_env, update_with_retry
 
 
 def main():
     setup_logging()
+    in_progress_states = get_states_from_env(
+        "TASKSYNC_YOUTRACK_INPROGRESS_STATES", ["In Progress"]
+    )
+    done_states = get_states_from_env("TASKSYNC_YOUTRACK_DONE_STATES", ["Done"])
     task_input = sys.stdin.read().strip()
     logging.debug(f"received input: {task_input}")
     try:
@@ -27,16 +31,16 @@ def main():
         sys.exit(0)
     state_id, issue_id = issue.split(":")
 
-    new_state = "To Do"
+    states = ["To Do"]
     if "start" in modified_task:
-        new_state = "In Progress"
+        states = in_progress_states
     elif modified_task.get("status") == "completed":
-        new_state = "Done"
+        states = done_states
     else:
         logging.debug("no state change detected, setting to todo")
 
-    update_youtrack_issue(issue_id, state_id, new_state)
-    logging.info(f"updated issue {issue_id} to state {new_state}")
+    update_with_retry(issue_id, state_id, states)
+
     print(json.dumps(modified_task))
     sys.exit(0)
 

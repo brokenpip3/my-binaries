@@ -5,12 +5,17 @@ import asyncio
 from datetime import datetime, timedelta, timezone
 from telethon import TelegramClient
 from telethon.sessions import MemorySession
+import os
 import subprocess
 import argparse
 
 
-UTIL_PRIVACY_TELEGRAM_CLEANUP_PASS_CLI = "pass"
-UTIL_PRIVACY_TELEGRAM_CLEANUP_PASS_ENTRY = "telegram-api"
+UTIL_PRIVACY_TELEGRAM_CLEANUP_PASS_CLI = os.getenv(
+    "UTIL_PRIVACY_TELEGRAM_CLEANUP_PASS_CLI", "pass"
+)
+UTIL_PRIVACY_TELEGRAM_CLEANUP_PASS_ENTRY = os.getenv(
+    "UTIL_PRIVACY_TELEGRAM_CLEANUP_PASS_ENTRY", "telegram/cleanup"
+)
 
 
 def get_api_credentials():

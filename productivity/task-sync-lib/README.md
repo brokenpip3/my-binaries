@@ -64,6 +64,8 @@ Pre-requisites:
 ```
 TASKSYNC_YOUTRACK_URL
 TASKSYNC_YOUTRACK_TOKEN
+TASKSYNC_YOUTRACK_INPROGRESS_STATES #Optional
+TASKSYNC_YOUTRACK_DONE_STATES       #Optional
 ```
 - The following uda fields in taskwarrior:
 ```bash

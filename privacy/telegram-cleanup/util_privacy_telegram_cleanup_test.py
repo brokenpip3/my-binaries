@@ -2,7 +2,12 @@ import pytest
 from unittest.mock import patch, MagicMock, AsyncMock
 from datetime import datetime, timedelta, timezone
 from telethon.tl.types import PeerChannel
-from util_privacy_telegram_cleanup import get_api_credentials, delete_old_messages, parse_args
+from util_privacy_telegram_cleanup import (
+    get_api_credentials,
+    delete_old_messages,
+    parse_args,
+)
+import os
 
 MOCK_API_ID = 5489987
 MOCK_CHAT_ID = 1001
@@ -35,7 +40,9 @@ def mock_subprocess_run(*args, **kwargs):
             self.stdout = stdout
             self.returncode = returncode
 
-    if args[0] == ["pass", "show", "telegram-api"]:
+    pass_entry = os.getenv("UTIL_PRIVACY_TELEGRAM_CLEANUP_PASS_ENTRY")
+    pass_command = os.getenv("UTIL_PRIVACY_TELEGRAM_CLEANUP_PASS_CLI")
+    if args[0] == [pass_command, "show", pass_entry]:
         return MockResult("appid: 5489987\nhash: mashupmyfakehash\n", 0)
     return MockResult("", 1)
 
@@ -56,8 +63,19 @@ def mock_client():
     client.delete_messages = AsyncMock()
     return client
 
+@pytest.fixture
+def mock_env_vars():
+  with patch.dict(
+    os.environ,
+    {
+      "UTIL_PRIVACY_TELEGRAM_CLEANUP_PASS_ENTRY": "telegram/cleanup",
+      "UTIL_PRIVACY_TELEGRAM_CLEANUP_PASS_CLI": "pass"
+    },
+  ):
+    yield
 
-def test_get_api_credentials():
+
+def test_get_api_credentials(mock_env_vars):
     with patch("subprocess.run", side_effect=mock_subprocess_run):
         api_id, api_hash = get_api_credentials()
         assert api_id == MOCK_API_ID
@@ -66,9 +84,9 @@ def test_get_api_credentials():
 
 @pytest.mark.asyncio
 async def test_delete_old_messages_interactive(mock_client):
-    with patch("util_privacy_telegram_cleanup.TelegramClient", return_value=mock_client), patch(
-        "builtins.input", side_effect=["group", "1", "yes", "no"]
-    ):
+    with patch(
+        "util_privacy_telegram_cleanup.TelegramClient", return_value=mock_client
+    ), patch("builtins.input", side_effect=["group", "1", "yes", "no"]):
         await delete_old_messages(
             chat_ids=[],
             interactive=True,
