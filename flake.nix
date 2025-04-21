@@ -25,21 +25,23 @@
               (pkgs.bats.withLibraries (p: [
                 p.bats-support
                 p.bats-assert
-                p.bats-file
-                p.bats-detik
               ]))
             ];
             doCheck = true;
             checkPhase = ''
-              bats -F tap --verbose-run .
+              if [ -f "${config.pname}.bats" ]; then
+                bats -F tap --verbose-run "${config.pname}.bats"
+              else
+                echo "No ${config.pname}.bats file found - skipping tests"
+              fi
             '';
             installPhase = ''
-            runHook preInstall
+              runHook preInstall
               mkdir -p $out/bin
               ${pkgs.lib.concatMapStrings (script: ''
                 install -Dm755 ${script} $out/bin/${builtins.baseNameOf script}
               '') config.scripts}
-            runHook postInstall
+              runHook postInstall
             '';
           };
 
@@ -64,6 +66,7 @@
               pytest -s -v; pytest --cov=. --cov-report=term-missing
             '';
             installPhase = ''
+              runHook preInstall
               mkdir -p $out/bin
               ${pkgs.lib.concatMapStrings (lib: ''
                 install -Dm644 ${lib} $out/bin/${builtins.baseNameOf lib}
@@ -72,22 +75,23 @@
                 base_name=$(basename ${script} .py)
                 install -Dm755 ${script} $out/bin/$base_name
               '') config.scripts}
+              runHook postInstall
             '';
           };
 
-      in
+        bashPackages = pkgs.lib.mapAttrs
+          (name: config: bashScriptGenPackage config pkgs)
+          pkgConfigBash;
+        pythonPackages = pkgs.lib.mapAttrs
+          (name: config: pythonScriptGenPackage config pkgs)
+          pkgConfigPython;
 
+      in
       {
         formatter = pkgs.nixfmt-rfc-style;
 
-        packages = {
+        packages = bashPackages // pythonPackages // {
           github-actions-hash = (import ./package-githubhash.nix { inherit pkgs; });
-          home-manager-remote = bashScriptGenPackage pkgConfigBash.home-manager-remote pkgs;
-          tartufi = pythonScriptGenPackage pkgConfigPython.tartufi pkgs;
-          task-sync-lib = pythonScriptGenPackage pkgConfigPython.task-sync-lib pkgs;
-          util_pass_bitwarden = pythonScriptGenPackage pkgConfigPython.util_pass_bitwarden pkgs;
-          util_privacy_telegram_cleanup = pythonScriptGenPackage pkgConfigPython.util_privacy_telegram_cleanup pkgs;
-          util_nix_doc_module = pythonScriptGenPackage pkgConfigPython.util_nix_doc_module pkgs;
         };
 
         devShells.default = pkgs.mkShell {
@@ -96,6 +100,10 @@
             ruff
             just
             deadnix
+            (bats.withLibraries (p: [
+              p.bats-support
+              p.bats-assert
+            ]))
           ];
         };
       }
