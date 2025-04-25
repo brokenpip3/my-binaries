@@ -1,9 +1,10 @@
+#!/usr/bin/env bash
 #
 # Home manager remote
 #
 # https://www.brokenpip3.com/posts/2024-27-06-nix-tiny-tools/#home-manager-remote
 #
-# shellcheck disable=SC2181,SC2029
+# shellcheck disable=SC2181,SC2029,SC1087
 
 set +u
 

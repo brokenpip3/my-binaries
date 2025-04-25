@@ -27,13 +27,21 @@
                 p.bats-assert
               ]))
             ];
+            patchPhase = ''
+              patchShebangs .
+            '';
             doCheck = true;
             checkPhase = ''
-              if [ -f "${config.pname}.bats" ]; then
-                bats -F tap --verbose-run "${config.pname}.bats"
-              else
-                echo "No ${config.pname}.bats file found - skipping tests"
-              fi
+              runHook preCheck
+                if [ -f "${config.pname}.bats" ]; then
+                  bats -F tap --verbose-run "${config.pname}.bats"
+                else
+                  echo "No ${config.pname}.bats file found - skipping tests"
+                fi
+              ${pkgs.lib.concatMapStrings (script: ''
+                ${pkgs.shellcheck-minimal}/bin/shellcheck ${builtins.baseNameOf script}
+              '') config.scripts}
+              runHook postCheck
             '';
             installPhase = ''
               runHook preInstall
@@ -63,7 +71,9 @@
               rm $out/nix-support/propagated-build-inputs
             '';
             checkPhase = ''
+              runHook preCheck
               pytest -s -v; pytest --cov=. --cov-report=term-missing
+              runHook postCheck
             '';
             installPhase = ''
               runHook preInstall
@@ -79,20 +89,21 @@
             '';
           };
 
-        bashPackages = pkgs.lib.mapAttrs
-          (name: config: bashScriptGenPackage config pkgs)
-          pkgConfigBash;
-        pythonPackages = pkgs.lib.mapAttrs
-          (name: config: pythonScriptGenPackage config pkgs)
-          pkgConfigPython;
+        bashPackages = pkgs.lib.mapAttrs (_: config: bashScriptGenPackage config pkgs) pkgConfigBash;
+        pythonPackages = pkgs.lib.mapAttrs (
+          _: config: pythonScriptGenPackage config pkgs
+        ) pkgConfigPython;
 
       in
       {
         formatter = pkgs.nixfmt-rfc-style;
 
-        packages = bashPackages // pythonPackages // {
-          github-actions-hash = (import ./package-githubhash.nix { inherit pkgs; });
-        };
+        packages =
+          bashPackages
+          // pythonPackages
+          // {
+            github-actions-hash = (import ./package-githubhash.nix { inherit pkgs; });
+          };
 
         devShells.default = pkgs.mkShell {
           packages = with pkgs; [
@@ -100,6 +111,7 @@
             ruff
             just
             deadnix
+            shellcheck-minimal
             (bats.withLibraries (p: [
               p.bats-support
               p.bats-assert

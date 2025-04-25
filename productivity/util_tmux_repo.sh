@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 repo_bases=(~/repo ~/dotfiles ~/var)
 fzf_cmd='fzf --tmux --height 100% --prompt=repo: '
 

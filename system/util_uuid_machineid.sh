@@ -1,4 +1,6 @@
-##!/usr/bin/env bash
+#!/usr/bin/env bash
+
+set -u
 
 MACHINE_ID=$(cat /etc/machine-id)
 UUID=$(echo -n "$MACHINE_ID" | sha1sum | awk '{print $1}' | head -c 32 \

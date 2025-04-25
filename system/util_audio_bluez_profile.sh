@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 set +u
 
 blueid=$(pw-dump | jq -r '.[] | select(.type=="PipeWire:Interface:Device" and .info.props["device.api"]=="bluez5") | .id')

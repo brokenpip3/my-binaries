@@ -1,3 +1,6 @@
+#!/usr/bin/env bash
+# shellcheck disable=SC2034,SC2004,SC2162
+
 command -v gpg &> /dev/null || { echo "gpg is not installed"; exit 1; }
 
 [ $# -ne 1 ] && { echo "usage: $0 <file_to_encrypt>"; exit 1; }

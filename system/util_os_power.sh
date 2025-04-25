@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 OPTIONS="exit i3\nsuspend\nreboot\npoweroff"
 
 if [ -t 0 ]; then
