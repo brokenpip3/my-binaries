@@ -24,6 +24,8 @@ Some (not all) of them start with `util` so it is easy to find them in the termi
 
 ## Categories
 
+Some of the binaries are:
+
 ### Security
 
 - [pass-bitwarden-sync](./security/pass-bitwarden-sync): sync your pass passwords into a bitwarden vault
