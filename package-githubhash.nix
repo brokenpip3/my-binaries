@@ -11,7 +11,7 @@ pkgs.python3Packages.buildPythonApplication {
     owner = "brokenpip3";
     repo = "pre-commit-hooks";
     rev = "main";
-    hash = "sha256-TYDVvkkUNc8pzZlVgIf+DM5ph7HJJSRdkPOUxJTu6bs=";
+    hash = "sha256-4hv8bGKTHgSv5Qbvd1U/q9r9JUbe5aod6ylpaQDUkmI=";
   };
 
   nativeBuildInputs = [

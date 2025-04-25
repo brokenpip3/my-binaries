@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# My attempt on the the primeagen tmux sessions script:
+# https://github.com/ThePrimeagen/.dotfiles/blob/master/bin/.local/scripts/tmux-sessionizer
+
+
 repo_bases=(~/repo ~/dotfiles ~/var)
 fzf_cmd='fzf --tmux --height 100% --prompt=repo: '
 
