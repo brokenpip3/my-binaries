@@ -96,6 +96,19 @@
         bashPackages = pkgs.lib.mapAttrs (_: config: bashScriptGenPackage config pkgs) pkgConfigBash;
         pythonPackages = pkgs.lib.mapAttrs (_: config: pythonScriptGenPackage config pkgs) pkgConfigPython;
 
+        perPackageDevShells =
+          let
+            mkDevShell =
+              name: config:
+              pkgs.mkShell {
+                name = name;
+                packages = builtins.map (
+                  pkg: pkgs.${pkg} or pkgs.python3Packages.${pkg}
+                ) config.propagatedBuildInputs;
+              };
+          in
+          pkgs.lib.mapAttrs mkDevShell pkgConfigPython;
+
       in
       {
         formatter = pkgs.nixfmt-rfc-style;
@@ -107,18 +120,20 @@
             github-actions-hash = (import ./package-githubhash.nix { inherit pkgs; });
           };
 
-        devShells.default = pkgs.mkShell {
-          packages = with pkgs; [
-            pre-commit
-            ruff
-            just
-            deadnix
-            shellcheck-minimal
-            (bats.withLibraries (p: [
-              p.bats-support
-              p.bats-assert
-            ]))
-          ];
+        devShells = perPackageDevShells // {
+          default = pkgs.mkShell {
+            packages = with pkgs; [
+              pre-commit
+              ruff
+              just
+              deadnix
+              shellcheck-minimal
+              (bats.withLibraries (p: [
+                p.bats-support
+                p.bats-assert
+              ]))
+            ];
+          };
         };
       }
     );
