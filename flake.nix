@@ -20,7 +20,7 @@
           pkgs.stdenv.mkDerivation {
             inherit (config) pname version;
             src = pkgs.lib.cleanSource ./${config.srcDir};
-            buildInputs = map (pkg: pkgs.${pkg}) config.propagatedBuildInputs;
+            buildInputs = map (pkg: pkgs.${pkg}) config.propagatedBuildInputs ++ [ pkgs.makeWrapper ];
             nativeCheckInputs = [
               (pkgs.bats.withLibraries (p: [
                 p.bats-support
@@ -47,7 +47,11 @@
               runHook preInstall
               mkdir -p $out/bin
               ${pkgs.lib.concatMapStrings (script: ''
-                install -Dm755 ${script} $out/bin/${builtins.baseNameOf script}
+                target=$out/bin/$(basename ${script})
+                install -Dm755 ${script} $target
+                wrapProgram $target --prefix PATH : ${
+                  pkgs.lib.makeBinPath (map (pkg: pkgs.${pkg}) config.propagatedBuildInputs)
+                }
               '') config.scripts}
               runHook postInstall
             '';
@@ -90,9 +94,7 @@
           };
 
         bashPackages = pkgs.lib.mapAttrs (_: config: bashScriptGenPackage config pkgs) pkgConfigBash;
-        pythonPackages = pkgs.lib.mapAttrs (
-          _: config: pythonScriptGenPackage config pkgs
-        ) pkgConfigPython;
+        pythonPackages = pkgs.lib.mapAttrs (_: config: pythonScriptGenPackage config pkgs) pkgConfigPython;
 
       in
       {

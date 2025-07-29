@@ -21,6 +21,14 @@ if [[ "$1" == "music" ]]; then
 
     set_profile "$profile_index" "$target"
     exit 0
+elif [[ "$1" == "call" ]]; then
+    target="headset-head-unit"
+    profile_index=$(pw-dump | jq -r --arg target "$target" '
+        .[] | select(.id == '"$blueid"') | .info.params.EnumProfile[]? |
+        select(.name == $target) | .index')
+
+    set_profile "$profile_index" "$target"
+    exit 0
 fi
 
 profiles=$(pw-dump | jq -c --argjson card "$blueid" '
