@@ -3,7 +3,6 @@
     pname = "util_pass_bitwarden";
     version = "0.3.0";
     propagatedBuildInputs = [
-      "python3"
       "bitwarden-cli"
     ];
     srcDir = "security/pass-bitwarden-sync";
@@ -15,7 +14,6 @@
     pname = "util_privacy_telegram_cleanup";
     version = "0.3.0";
     propagatedBuildInputs = [
-      "python3"
       "telethon"
     ];
     srcDir = "privacy/telegram-cleanup";
@@ -27,7 +25,6 @@
     pname = "task-sync-lib";
     version = "0.3.1";
     propagatedBuildInputs = [
-      "python3"
       "requests"
     ];
     srcDir = "productivity/task-sync-lib";
@@ -49,7 +46,6 @@
     pname = "tartufi";
     version = "0.1.0";
     propagatedBuildInputs = [
-      "python3"
       "requests"
     ];
     srcDir = "security/tartufi";
@@ -61,10 +57,20 @@
     pname = "util_nix_doc_module";
     version = "0.1.0";
     propagatedBuildInputs = [
-      "python3"
     ];
     srcDir = "productivity/nix-specific/util-nix-doc-module";
     libs = [];
     scripts = [ "util_nix_doc_module.py" ];
+  };
+
+  tiny_mcp_server_taskwarrior = {
+    pname = "tiny_mcp_server_taskwarrior";
+    version = "0.1.0";
+    propagatedBuildInputs = [
+      "mcp"
+    ];
+    srcDir = "productivity/ai/mcp-servers";
+    libs = [];
+    scripts = [ "taskwarrior.py" ];
   };
 }

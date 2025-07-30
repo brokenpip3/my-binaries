@@ -2,7 +2,7 @@
   description = "My binaries";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-24.11";
+    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-25.05";
     flake-utils.url = "github:numtide/flake-utils";
   };
 
@@ -63,9 +63,10 @@
             inherit (config) pname version;
             src = pkgs.lib.cleanSource ./${config.srcDir};
             format = "other";
-            propagatedBuildInputs = map (
-              pkg: pkgs.${pkg} or pkgs.python3Packages.${pkg}
-            ) config.propagatedBuildInputs;
+            propagatedBuildInputs = [
+              pkgs.python3
+            ] ++ map (pkg: pkgs.${pkg} or pkgs.python3Packages.${pkg}) config.propagatedBuildInputs;
+
             nativeCheckInputs = [
               pkgs.python3Packages.pytest
               pkgs.python3Packages.pytest-asyncio
@@ -100,11 +101,12 @@
           let
             mkDevShell =
               name: config:
+              let
+                pythonEnv = pkgs.python3.withPackages (ps: map (pkg: ps.${pkg}) config.propagatedBuildInputs);
+              in
               pkgs.mkShell {
                 name = name;
-                packages = builtins.map (
-                  pkg: pkgs.${pkg} or pkgs.python3Packages.${pkg}
-                ) config.propagatedBuildInputs;
+                packages = [ pythonEnv ];
               };
           in
           pkgs.lib.mapAttrs mkDevShell pkgConfigPython;
