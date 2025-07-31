@@ -27,7 +27,7 @@
 
   util_audio_bluez_profile = {
     pname = "util_audio_bluez_profile";
-    version = "0.1.0";
+    version = "0.1.1";
     propagatedBuildInputs = [
       "bash"
       "coreutils"
