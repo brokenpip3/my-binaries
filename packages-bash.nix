@@ -1,7 +1,7 @@
 {
   home-manager-remote = {
     pname = "home-manager-remote";
-    version = "0.1.0";
+    version = "0.1.1";
     propagatedBuildInputs = [
       "bash"
       "coreutils"
@@ -15,7 +15,7 @@
 
   util_uuid_machineid = {
     pname = "util_uuid_machineid";
-    version = "0.1.0";
+    version = "0.1.1";
     propagatedBuildInputs = [
       "bash"
       "coreutils"
@@ -27,7 +27,7 @@
 
   util_audio_bluez_profile = {
     pname = "util_audio_bluez_profile";
-    version = "0.1.0";
+    version = "0.1.1";
     propagatedBuildInputs = [
       "bash"
       "coreutils"
@@ -41,7 +41,7 @@
 
   util_os_power = {
     pname = "util_os_power";
-    version = "0.1.0";
+    version = "0.1.1";
     propagatedBuildInputs = [
       "bash"
       "coreutils"
@@ -55,7 +55,7 @@
 
   util_tmux_repo = {
     pname = "util_tmux_repo";
-    version = "0.1.0";
+    version = "0.1.1";
     propagatedBuildInputs = [
       "bash"
       "coreutils"
@@ -69,7 +69,7 @@
 
   util_run_xdotool = {
     pname = "util_run_xdotool";
-    version = "0.1.0";
+    version = "0.1.1";
     propagatedBuildInputs = [
       "bash"
       "coreutils"
@@ -82,7 +82,7 @@
 
   util_privacy_gpg_encrypt = {
     pname = "util_privacy_gpg_encrypt";
-    version = "0.1.0";
+    version = "0.1.1";
     propagatedBuildInputs = [
       "bash"
       "coreutils"

@@ -2,7 +2,7 @@
   description = "My binaries";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-24.11";
+    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-25.05";
     flake-utils.url = "github:numtide/flake-utils";
   };
 
@@ -20,7 +20,7 @@
           pkgs.stdenv.mkDerivation {
             inherit (config) pname version;
             src = pkgs.lib.cleanSource ./${config.srcDir};
-            buildInputs = map (pkg: pkgs.${pkg}) config.propagatedBuildInputs;
+            buildInputs = map (pkg: pkgs.${pkg}) config.propagatedBuildInputs ++ [ pkgs.makeWrapper ];
             nativeCheckInputs = [
               (pkgs.bats.withLibraries (p: [
                 p.bats-support
@@ -47,7 +47,11 @@
               runHook preInstall
               mkdir -p $out/bin
               ${pkgs.lib.concatMapStrings (script: ''
-                install -Dm755 ${script} $out/bin/${builtins.baseNameOf script}
+                target=$out/bin/$(basename ${script})
+                install -Dm755 ${script} $target
+                wrapProgram $target --prefix PATH : ${
+                  pkgs.lib.makeBinPath (map (pkg: pkgs.${pkg}) config.propagatedBuildInputs)
+                }
               '') config.scripts}
               runHook postInstall
             '';
@@ -59,9 +63,10 @@
             inherit (config) pname version;
             src = pkgs.lib.cleanSource ./${config.srcDir};
             format = "other";
-            propagatedBuildInputs = map (
-              pkg: pkgs.${pkg} or pkgs.python3Packages.${pkg}
-            ) config.propagatedBuildInputs;
+            propagatedBuildInputs = [
+              pkgs.python3
+            ] ++ map (pkg: pkgs.${pkg} or pkgs.python3Packages.${pkg}) config.propagatedBuildInputs;
+
             nativeCheckInputs = [
               pkgs.python3Packages.pytest
               pkgs.python3Packages.pytest-asyncio
@@ -90,10 +95,26 @@
           };
 
         bashPackages = pkgs.lib.mapAttrs (_: config: bashScriptGenPackage config pkgs) pkgConfigBash;
-        pythonPackages = pkgs.lib.mapAttrs (
-          _: config: pythonScriptGenPackage config pkgs
-        ) pkgConfigPython;
+        pythonPackages = pkgs.lib.mapAttrs (_: config: pythonScriptGenPackage config pkgs) pkgConfigPython;
 
+        perPackageDevShells =
+         let
+           mkDevShell =
+             name: config:
+             let
+               isPyPkg = pkg: pkgs.python3Packages ? "${pkg}";
+               pythonPkgs = map (pkg: pkgs.python3Packages.${pkg})
+                 (builtins.filter isPyPkg config.propagatedBuildInputs);
+               otherPkgs = map (pkg: pkgs.${pkg})
+                 (builtins.filter (pkg: !(isPyPkg pkg)) config.propagatedBuildInputs);
+               pythonEnv = pkgs.python3.withPackages (_: pythonPkgs);
+             in
+             pkgs.mkShell {
+               inherit name;
+               packages = [ pythonEnv ] ++ otherPkgs;
+             };
+         in
+         pkgs.lib.mapAttrs mkDevShell pkgConfigPython;
       in
       {
         formatter = pkgs.nixfmt-rfc-style;
@@ -105,18 +126,20 @@
             github-actions-hash = (import ./package-githubhash.nix { inherit pkgs; });
           };
 
-        devShells.default = pkgs.mkShell {
-          packages = with pkgs; [
-            pre-commit
-            ruff
-            just
-            deadnix
-            shellcheck-minimal
-            (bats.withLibraries (p: [
-              p.bats-support
-              p.bats-assert
-            ]))
-          ];
+        devShells = perPackageDevShells // {
+          default = pkgs.mkShell {
+            packages = with pkgs; [
+              pre-commit
+              ruff
+              just
+              deadnix
+              shellcheck-minimal
+              (bats.withLibraries (p: [
+                p.bats-support
+                p.bats-assert
+              ]))
+            ];
+          };
         };
       }
     );
