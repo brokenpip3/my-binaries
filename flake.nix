@@ -98,19 +98,23 @@
         pythonPackages = pkgs.lib.mapAttrs (_: config: pythonScriptGenPackage config pkgs) pkgConfigPython;
 
         perPackageDevShells =
-          let
-            mkDevShell =
-              name: config:
-              let
-                pythonEnv = pkgs.python3.withPackages (ps: map (pkg: ps.${pkg}) config.propagatedBuildInputs);
-              in
-              pkgs.mkShell {
-                name = name;
-                packages = [ pythonEnv ];
-              };
-          in
-          pkgs.lib.mapAttrs mkDevShell pkgConfigPython;
-
+         let
+           mkDevShell =
+             name: config:
+             let
+               isPyPkg = pkg: pkgs.python3Packages ? "${pkg}";
+               pythonPkgs = map (pkg: pkgs.python3Packages.${pkg})
+                 (builtins.filter isPyPkg config.propagatedBuildInputs);
+               otherPkgs = map (pkg: pkgs.${pkg})
+                 (builtins.filter (pkg: !(isPyPkg pkg)) config.propagatedBuildInputs);
+               pythonEnv = pkgs.python3.withPackages (_: pythonPkgs);
+             in
+             pkgs.mkShell {
+               inherit name;
+               packages = [ pythonEnv ] ++ otherPkgs;
+             };
+         in
+         pkgs.lib.mapAttrs mkDevShell pkgConfigPython;
       in
       {
         formatter = pkgs.nixfmt-rfc-style;
