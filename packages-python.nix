@@ -63,14 +63,14 @@
     scripts = [ "util_nix_doc_module.py" ];
   };
 
-  tiny_mcp_server_taskwarrior = {
-    pname = "tiny_mcp_server_taskwarrior";
-    version = "0.1.0";
-    propagatedBuildInputs = [
-      "mcp"
-    ];
-    srcDir = "productivity/ai/mcp-servers";
-    libs = [];
-    scripts = [ "taskwarrior.py" ];
-  };
+  #tiny_mcp_server_taskwarrior = {
+  #  pname = "tiny_mcp_server_taskwarrior";
+  #  version = "0.1.0";
+  #  propagatedBuildInputs = [
+  #    "mcp"
+  #  ];
+  #  srcDir = "productivity/ai/mcp-servers";
+  #  libs = [];
+  #  scripts = [ "taskwarrior.py" ];
+  #};
 }
