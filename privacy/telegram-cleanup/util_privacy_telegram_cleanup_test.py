@@ -63,16 +63,17 @@ def mock_client():
     client.delete_messages = AsyncMock()
     return client
 
+
 @pytest.fixture
 def mock_env_vars():
-  with patch.dict(
-    os.environ,
-    {
-      "UTIL_PRIVACY_TELEGRAM_CLEANUP_PASS_ENTRY": "telegram/cleanup",
-      "UTIL_PRIVACY_TELEGRAM_CLEANUP_PASS_CLI": "pass"
-    },
-  ):
-    yield
+    with patch.dict(
+        os.environ,
+        {
+            "UTIL_PRIVACY_TELEGRAM_CLEANUP_PASS_ENTRY": "telegram/cleanup",
+            "UTIL_PRIVACY_TELEGRAM_CLEANUP_PASS_CLI": "pass",
+        },
+    ):
+        yield
 
 
 def test_get_api_credentials(mock_env_vars):
@@ -84,9 +85,10 @@ def test_get_api_credentials(mock_env_vars):
 
 @pytest.mark.asyncio
 async def test_delete_old_messages_interactive(mock_client):
-    with patch(
-        "util_privacy_telegram_cleanup.TelegramClient", return_value=mock_client
-    ), patch("builtins.input", side_effect=["group", "1", "yes", "no"]):
+    with (
+        patch("util_privacy_telegram_cleanup.TelegramClient", return_value=mock_client),
+        patch("builtins.input", side_effect=["group", "1", "yes", "no"]),
+    ):
         await delete_old_messages(
             chat_ids=[],
             interactive=True,

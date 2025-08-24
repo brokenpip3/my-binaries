@@ -51,6 +51,9 @@ build-productivity:
     nix build -L .#util_nix_doc_module
     nix build -L .#util_run_xdotool
     nix build -L .#util_tmux_repo
+    nix build -L .#util_run_all
+    nix build -L .#tiny_mcp_server_taskwarrior
+    nix build -L .#util_run_all
 
 # Build category system
 build-system:
@@ -58,9 +61,16 @@ build-system:
     nix build -L .#util_audio_bluez_profile
     nix build -L .#util_os_power
 
+# Build category ci
+build-ci:
+    nix build -L .#util_ci_changedfiles
+
+build-docker:
+    nix build -L .#dockerimg_tiny_mcp_server_taskwarrior
+
 # Build github-actions-hash
 build-githubhash:
     nix build -L .#github-actions-hash
 
 # Build all packages
-build: build-security build-privacy build-productivity build-system build-githubhash
+build: build-security build-privacy build-productivity build-system build-githubhash build-ci build-docker

@@ -17,7 +17,7 @@ def main():
             sys.exit(1)
         project = task.get("project")
         if project:
-            project = f"projects/{project.replace(".", "/")}"
+            project = f"projects/{project.replace('.', '/')}"
         else:
             project = "taskwarrior"
         logseq_response = create_logseq_todo(translate_taskwarrior(task), project)

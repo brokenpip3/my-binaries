@@ -92,4 +92,17 @@
     libs = [ ];
     scripts = [ "util_privacy_gpg_encrypt.sh" ];
   };
+
+  util_run_all = {
+    pname = "util_run_all";
+    version = "0.1.0";
+    propagatedBuildInputs = [
+      "bash"
+      "coreutils"
+      "fzf"
+    ];
+    srcDir = "productivity";
+    libs = [ ];
+    scripts = [ "util_run_all.sh" ];
+  };
 }
