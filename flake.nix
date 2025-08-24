@@ -63,7 +63,7 @@
           };
 
         pythonScriptGenPackage =
-          config: pkgs:
+          config: pkgs: unstable:
           let
             resolve =
               name:
