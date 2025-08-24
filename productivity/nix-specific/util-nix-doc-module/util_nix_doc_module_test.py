@@ -9,9 +9,11 @@ from util_nix_doc_module import (
 
 @pytest.fixture(autouse=True)
 def mock_logging():
-    with mock.patch("logging.error") as mock_error, mock.patch(
-        "logging.info"
-    ) as mock_info, mock.patch("logging.warning") as mock_warning:
+    with (
+        mock.patch("logging.error") as mock_error,
+        mock.patch("logging.info") as mock_info,
+        mock.patch("logging.warning") as mock_warning,
+    ):
         yield mock_info, mock_warning, mock_error
 
 
@@ -39,9 +41,10 @@ def mock_nix_module():
 
 def test_parse_nix_module_valid(mock_logging, mock_nix_module):
     mock_info, mock_warning, mock_error = mock_logging
-    with mock.patch(
-        "builtins.open", mock.mock_open(read_data=mock_nix_module)
-    ), mock.patch("os.path.exists", return_value=True):
+    with (
+        mock.patch("builtins.open", mock.mock_open(read_data=mock_nix_module)),
+        mock.patch("os.path.exists", return_value=True),
+    ):
         result = parse_nix_module("test_file.nix")
 
     assert "dotfiles.superhero.time" in result
@@ -97,11 +100,11 @@ def test_generate_readme(mock_nix_module):
 
 def test_process_nix_files_in_directory_no_write(mock_logging, mock_nix_module):
     mock_info, mock_warning, mock_error = mock_logging
-    with mock.patch(
-        "builtins.open", mock.mock_open(read_data=mock_nix_module)
-    ), mock.patch("os.path.exists", return_value=True), mock.patch(
-        "os.walk", return_value=[("test_dir", [], ["test_file.nix"])]
-    ), mock.patch("logging.info") as mock_info:
+    with (
+        mock.patch("builtins.open", mock.mock_open(read_data=mock_nix_module)),
+        mock.patch("os.path.exists", return_value=True),
+        mock.patch("os.walk", return_value=[("test_dir", [], ["test_file.nix"])]),
+    ):
         process_nix_files_in_directory("test_dir", write=False)
 
     mock_info.assert_any_call("parsing file: test_dir/test_file.nix")
@@ -109,21 +112,22 @@ def test_process_nix_files_in_directory_no_write(mock_logging, mock_nix_module):
 
 def test_process_nix_files_in_directory_write(mock_logging, mock_nix_module):
     mock_info, mock_warning, mock_error = mock_logging
-    with mock.patch(
-        "builtins.open", mock.mock_open(read_data=mock_nix_module)
-    ), mock.patch("os.path.exists", return_value=True), mock.patch(
-        "os.walk", return_value=[("test_dir", [], ["test_file.nix"])]
-    ), mock.patch("logging.info") as mock_info, mock.patch(
-        "builtins.open", mock.mock_open()
-    ) as mock_open:
+    with (
+        mock.patch("builtins.open", mock.mock_open(read_data=mock_nix_module)),
+        mock.patch("os.path.exists", return_value=True),
+        mock.patch("os.walk", return_value=[("test_dir", [], ["test_file.nix"])]),
+    ):
         process_nix_files_in_directory("test_dir", write=True)
     mock_info.assert_any_call("parsing file: test_dir/test_file.nix")
 
 
 def test_main_valid(mock_logging):
-    with mock.patch("os.path.isdir", return_value=True), mock.patch(
-        "util_nix_doc_module.process_nix_files_in_directory"
-    ) as mock_process:
+    with (
+        mock.patch("os.path.isdir", return_value=True),
+        mock.patch(
+            "util_nix_doc_module.process_nix_files_in_directory"
+        ) as mock_process,
+    ):
         with mock.patch(
             "argparse.ArgumentParser.parse_args",
             return_value=mock.Mock(directory_path="test_dir", write=False),
@@ -136,9 +140,12 @@ def test_main_valid(mock_logging):
 
 def test_main_invalid_directory(mock_logging):
     mock_info, mock_warning, mock_error = mock_logging
-    with mock.patch("os.path.isdir", return_value=False), mock.patch(
-        "argparse.ArgumentParser.parse_args",
-        return_value=mock.Mock(directory_path="invalid_dir", write=False),
+    with (
+        mock.patch("os.path.isdir", return_value=False),
+        mock.patch(
+            "argparse.ArgumentParser.parse_args",
+            return_value=mock.Mock(directory_path="invalid_dir", write=False),
+        ),
     ):
         from util_nix_doc_module import main
 

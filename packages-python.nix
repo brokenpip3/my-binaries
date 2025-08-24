@@ -63,14 +63,28 @@
     scripts = [ "util_nix_doc_module.py" ];
   };
 
-  #tiny_mcp_server_taskwarrior = {
-  #  pname = "tiny_mcp_server_taskwarrior";
-  #  version = "0.1.0";
-  #  propagatedBuildInputs = [
-  #    "mcp"
-  #  ];
-  #  srcDir = "productivity/ai/mcp-servers";
-  #  libs = [];
-  #  scripts = [ "taskwarrior.py" ];
-  #};
+  util_ci_changedfiles = {
+    pname = "util_ci_changedfiles";
+    version = "0.0.1";
+    propagatedBuildInputs = [
+      "gitpython"
+    ];
+    srcDir = "ci/changed-files";
+    libs = [];
+    scripts = [ "util_ci_changedfiles.py" ];
+  };
+
+  tiny_mcp_server_taskwarrior = {
+    pname = "tiny_mcp_server_taskwarrior";
+    version = "0.1.0";
+    propagatedBuildInputs = [
+      "mcp"
+      "pytest"
+    ];
+    srcDir = "productivity/ai/mcp-servers";
+    libs = [];
+    scripts = [ "mcp_server_taskwarrior.py" ];
+    useUnstable = true;
+    docker = true;
+  };
 }
