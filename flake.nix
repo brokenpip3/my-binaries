@@ -34,17 +34,15 @@
                 p.bats-assert
               ]))
             ];
-            patchPhase = ''
-              patchShebangs .
-            '';
+            patchPhase = ''patchShebangs .'';
             doCheck = true;
             checkPhase = ''
               runHook preCheck
-                if [ -f "${config.pname}.bats" ]; then
-                  bats -F tap --verbose-run "${config.pname}.bats"
-                else
-                  echo "no ${config.pname}.bats file found - skipping tests"
-                fi
+              if [ -f "${config.pname}.bats" ]; then
+                bats -F tap --verbose-run "${config.pname}.bats"
+              else
+                echo "no ${config.pname}.bats file found - skipping tests"
+              fi
               ${pkgs.lib.concatMapStrings (script: ''
                 ${pkgs.shellcheck-minimal}/bin/shellcheck ${builtins.baseNameOf script}
               '') config.scripts}
@@ -73,7 +71,10 @@
                 stable = pyPkgs.${name} or null;
                 unstab = unstabPyPkgs.${name} or null;
               in
-              if config.useUnstable or false then unstab else stable;
+              if stable != null || unstab != null then
+                if config.useUnstable or false then unstab else stable
+              else
+                pkgs.${name};
 
             pyWorld = if config.useUnstable or false then unstabPyPkgs else pyPkgs;
           in
@@ -108,6 +109,7 @@
           };
 
         bashPackages = pkgs.lib.mapAttrs (_: config: bashScriptGenPackage config pkgs) pkgConfigBash;
+
         pythonPackages = pkgs.lib.mapAttrs (
           _: config: pythonScriptGenPackage config pkgs unstable
         ) pkgConfigPython;
@@ -150,21 +152,26 @@
                     stable = pyPkgs.${name} or null;
                     unstab = unstabPyPkgs.${name} or null;
                   in
-                  if config.useUnstable or false then unstab else stable;
+                  if stable != null || unstab != null then
+                    if config.useUnstable or false then unstab else stable
+                  else
+                    pkgs.${name};
 
-                isPyPkg = name: pyPkgs ? "${name}" || unstabPyPkgs ? "${name}";
-
+                isPyPkg = name: (pyPkgs ? "${name}") || (unstabPyPkgs ? "${name}");
                 pythonPkgs = map resolve (builtins.filter isPyPkg config.propagatedBuildInputs);
                 otherPkgs = map resolve (builtins.filter (pkg: !(isPyPkg pkg)) config.propagatedBuildInputs);
+
                 pythonEnv =
-                  if config.useUnstable or false then
+                  if (config.useUnstable or false) && (pythonPkgs != [ ]) then
                     unstable.${pythonVersion}.withPackages (_: pythonPkgs)
+                  else if pythonPkgs != [ ] then
+                    pkgs.${pythonVersion}.withPackages (_: pythonPkgs)
                   else
-                    pkgs.${pythonVersion}.withPackages (_: pythonPkgs);
+                    null;
               in
               pkgs.mkShell {
                 inherit name;
-                packages = [ pythonEnv ] ++ otherPkgs;
+                packages = (if pythonEnv != null then [ pythonEnv ] else [ ]) ++ otherPkgs;
               };
           in
           pkgs.lib.mapAttrs mkDevShell pkgConfigPython;
