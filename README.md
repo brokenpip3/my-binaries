@@ -45,3 +45,7 @@ Some of the binaries are:
 - [home-manager-remote](./productivity/nix-specific/home-manager-remote): nixos-rebuild via ssh for home-manager, more on this blog [post](https://www.brokenpip3.com/posts/2024-27-06-nix-tiny-tools/#home-manager-remote)
 
 - [util_nix_doc_module](./productivity/nix-specific/util-nix-doc-module): a simple script to generate a markdown documentation for a nix module across all the files in a given directory
+
+#### AI
+
+- [mcp-servers](./productivity/ai/mcp-servers) mcp servers that I use with various AI tools
