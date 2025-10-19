@@ -47,6 +47,7 @@ build-privacy:
 # Build category productivity
 build-productivity:
     nix build -L .#task-sync-lib
+    nix build -L .#util_task_open
     nix build -L .#home-manager-remote
     nix build -L .#util_nix_doc_module
     nix build -L .#util_run_xdotool

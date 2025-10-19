@@ -42,22 +42,34 @@
     ];
   };
 
+  util_task_open = {
+    pname = "util_task_open";
+    version = "0.1.0";
+    propagatedBuildInputs = [
+      "fzf"
+    ];
+    srcDir = "productivity/task-open";
+    libs = [ ];
+    scripts = [
+      "util_task_open.py"
+    ];
+  };
+
   tartufi = {
     pname = "tartufi";
     version = "0.1.0";
     propagatedBuildInputs = [
       "requests"
     ];
-    srcDir = "security/tartufi";
     libs = [ ];
+    srcDir = "security/tartufi";
     scripts = [ "tartufi.py" ];
   };
 
   util_nix_doc_module = {
     pname = "util_nix_doc_module";
     version = "0.1.0";
-    propagatedBuildInputs = [
-    ];
+    propagatedBuildInputs = [ ];
     srcDir = "productivity/nix-specific/util-nix-doc-module";
     libs = [ ];
     scripts = [ "util_nix_doc_module.py" ];
