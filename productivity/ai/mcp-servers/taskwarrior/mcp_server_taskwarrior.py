@@ -17,7 +17,7 @@ import os
 
 logging.basicConfig(level=logging.INFO)
 
-BEARER_TOKEN = os.getenv("UTIL_AI_MCP_TASKWARRIOR", "change-me")
+BEARER_TOKEN = os.getenv("UTIL_AI_MCP_TASKWARRIOR_TOKEN", "change-me")
 
 
 class TaskwarriorTokenVerifier(TokenVerifier):

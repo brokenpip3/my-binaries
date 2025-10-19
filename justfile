@@ -52,8 +52,8 @@ build-productivity:
     nix build -L .#util_run_xdotool
     nix build -L .#util_tmux_repo
     nix build -L .#util_run_all
-    nix build -L .#tiny_mcp_server_taskwarrior
-    nix build -L .#util_run_all
+    nix build -L .#util_ai_mcp_taskwarrior
+    nix build -L .#util_ai_mcp_googlecalendar
 
 # Build category system
 build-system:
@@ -66,7 +66,8 @@ build-ci:
     nix build -L .#util_ci_changedfiles
 
 build-docker:
-    nix build -L .#dockerimg_tiny_mcp_server_taskwarrior
+    #nix build -L .#dockerimg_util_ai_mcp_taskwarrior
+    nix build -L .#dockerimg_util_ai_mcp_googlecalendar
 
 # Build github-actions-hash
 build-githubhash:
