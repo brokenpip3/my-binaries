@@ -201,6 +201,7 @@
                 p.bats-assert
               ]))
             ];
+            PYTHONDONTWRITEBYTECODE = 1;
           };
         };
       }
