@@ -67,7 +67,7 @@ build-ci:
     nix build -L .#util_ci_changedfiles
 
 build-docker:
-    #nix build -L .#dockerimg_util_ai_mcp_taskwarrior
+    nix build -L .#dockerimg_util_ai_mcp_taskwarrior
     nix build -L .#dockerimg_util_ai_mcp_googlecalendar
 
 # Build github-actions-hash

@@ -95,7 +95,7 @@
 
   util_run_all = {
     pname = "util_run_all";
-    version = "0.1.0";
+    version = "0.1.1";
     propagatedBuildInputs = [
       "bash"
       "coreutils"
