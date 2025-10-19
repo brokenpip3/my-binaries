@@ -26,26 +26,21 @@ Some (not all) of them start with `util` so it is easy to find them in the termi
 
 Some of the binaries are:
 
+### System
+
+- [system](./system/): various linux related utilities
+
 ### Security
 
 - [pass-bitwarden-sync](./security/pass-bitwarden-sync): sync your pass passwords into a bitwarden vault
+- [tartufi](./security/tartufi): simple [trufflehog](https://github.com/trufflesecurity/trufflehog) companion that will let you scan an entire docker registry organization for secrets
 
 ### Privacy
 
 - [util_privacy_telegram-cleanup](./privacy/telegram-cleanup): cleanup your telegram account: delete all messages older than x days from groups and dms
 
-- [tartufi](./security/tartufi): simple [trufflehog](https://github.com/trufflesecurity/trufflehog) companion that will let you scan an entire docker registry organization for secrets
-
 ### Productivity
 
 - [task-sync-lib](./productivity/task-sync-lib): a library to sync your tasks with different systems (logseq and youtrack atm)
-
-#### Nix
-
-- [home-manager-remote](./productivity/nix-specific/home-manager-remote): nixos-rebuild via ssh for home-manager, more on this blog [post](https://www.brokenpip3.com/posts/2024-27-06-nix-tiny-tools/#home-manager-remote)
-
-- [util_nix_doc_module](./productivity/nix-specific/util-nix-doc-module): a simple script to generate a markdown documentation for a nix module across all the files in a given directory
-
-#### AI
-
-- [mcp-servers](./productivity/ai/mcp-servers) mcp servers that I use with various AI tools
+- [nix](./productivity/nix-specific/): nix specific productivity tools
+- [ai](./productivity/ai/) mcp servers that I use with AI tools
