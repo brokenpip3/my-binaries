@@ -111,7 +111,7 @@
         bashPackages = pkgs.lib.mapAttrs (_: config: bashScriptGenPackage config pkgs) pkgConfigBash;
 
         pythonPackages = pkgs.lib.mapAttrs (
-          _: config: pythonScriptGenPackage config pkgs
+          _: config: pythonScriptGenPackage config pkgs unstable
         ) pkgConfigPython;
 
         pythonDockerImages = pkgs.lib.mapAttrs' (
