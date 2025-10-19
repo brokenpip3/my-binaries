@@ -24,23 +24,15 @@ Some (not all) of them start with `util` so it is easy to find them in the termi
 
 ## Categories
 
-Some of the binaries are:
-
-### System
+Some of the binaries are in:
 
 - [system](./system/): various linux related utilities
-
-### Security
-
-- [pass-bitwarden-sync](./security/pass-bitwarden-sync): sync your pass passwords into a bitwarden vault
-- [tartufi](./security/tartufi): simple [trufflehog](https://github.com/trufflesecurity/trufflehog) companion that will let you scan an entire docker registry organization for secrets
-
-### Privacy
-
-- [util_privacy_telegram-cleanup](./privacy/telegram-cleanup): cleanup your telegram account: delete all messages older than x days from groups and dms
-
-### Productivity
-
-- [task-sync-lib](./productivity/task-sync-lib): a library to sync your tasks with different systems (logseq and youtrack atm)
-- [nix](./productivity/nix-specific/): nix specific productivity tools
-- [ai](./productivity/ai/) mcp servers that I use with AI tools
+- [security](./security/): security related tools
+  - [pass-bitwarden-sync](./security/pass-bitwarden-sync): sync your pass passwords into a bitwarden vault
+  - [tartufi](./security/tartufi): simple [trufflehog](https://github.com/trufflesecurity/trufflehog) companion that will let you scan an entire docker registry organization for secrets
+- [privacy](./privacy/): privacy tools
+  - [util_privacy_telegram_cleanup](./privacy/telegram-cleanup): cleanup your telegram account: delete all messages older than x days from groups and dms
+- [productivity](./productivity/): productivity tools
+  - [task-sync-lib](./productivity/task-sync-lib): a library to sync your tasks with different systems (logseq and youtrack atm)
+  - [nix](./productivity/nix-specific/): nix specific productivity tools
+  - [ai](./productivity/ai/) mcp servers that I use with AI tools
