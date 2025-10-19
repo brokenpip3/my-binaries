@@ -2,11 +2,11 @@
 
 get_util_stuff() {
     compgen -c | grep "^util_"
-    if [[ -f ~/.bashrc ]]; then
-        grep "^alias util_" ~/.bashrc | sed 's/^alias \([^=]*\)=.*/\1/'
-    fi
+    [[ -f ~/.bashrc ]] && grep "^alias util_" ~/.bashrc | sed 's/^alias \([^=]*\)=.*/\1/'
 }
 
 selected=$(get_util_stuff | sort -u | fzf --height=40% --reverse --prompt="util> ")
+[[ -z "$selected" ]] && exit
 
-[[ -n "$selected" ]] && bash -i -c "$selected"
+read -r -e -p "> " args
+bash -i -c "$selected $args"

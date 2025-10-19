@@ -2,10 +2,6 @@
 import pytest
 from unittest.mock import patch, MagicMock
 from datetime import datetime, timedelta
-import sys
-import os
-
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from mcp_server_taskwarrior import (
     task_execute_query,
     task_count_filtered,

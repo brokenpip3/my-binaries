@@ -6,7 +6,7 @@
       "bitwarden-cli"
     ];
     srcDir = "security/pass-bitwarden-sync";
-    libs = [];
+    libs = [ ];
     scripts = [ "util_pass_bitwarden.py" ];
   };
 
@@ -17,7 +17,7 @@
       "telethon"
     ];
     srcDir = "privacy/telegram-cleanup";
-    libs = [];
+    libs = [ ];
     scripts = [ "util_privacy_telegram_cleanup.py" ];
   };
 
@@ -42,24 +42,36 @@
     ];
   };
 
+  util_task_open = {
+    pname = "util_task_open";
+    version = "0.1.0";
+    propagatedBuildInputs = [
+      "fzf"
+    ];
+    srcDir = "productivity/task-open";
+    libs = [ ];
+    scripts = [
+      "util_task_open.py"
+    ];
+  };
+
   tartufi = {
     pname = "tartufi";
     version = "0.1.0";
     propagatedBuildInputs = [
       "requests"
     ];
+    libs = [ ];
     srcDir = "security/tartufi";
-    libs = [];
     scripts = [ "tartufi.py" ];
   };
 
   util_nix_doc_module = {
     pname = "util_nix_doc_module";
     version = "0.1.0";
-    propagatedBuildInputs = [
-    ];
+    propagatedBuildInputs = [ ];
     srcDir = "productivity/nix-specific/util-nix-doc-module";
-    libs = [];
+    libs = [ ];
     scripts = [ "util_nix_doc_module.py" ];
   };
 
@@ -70,20 +82,36 @@
       "gitpython"
     ];
     srcDir = "ci/changed-files";
-    libs = [];
+    libs = [ ];
     scripts = [ "util_ci_changedfiles.py" ];
   };
 
-  tiny_mcp_server_taskwarrior = {
-    pname = "tiny_mcp_server_taskwarrior";
-    version = "0.1.0";
+  util_ai_mcp_taskwarrior = {
+    pname = "util_ai_mcp_taskwarrior";
+    version = "0.1.1";
     propagatedBuildInputs = [
       "mcp"
       "pytest"
     ];
-    srcDir = "productivity/ai/mcp-servers";
-    libs = [];
+    srcDir = "productivity/ai/mcp-servers/taskwarrior";
+    libs = [ ];
     scripts = [ "mcp_server_taskwarrior.py" ];
+    useUnstable = true;
+    docker = true;
+  };
+
+  util_ai_mcp_googlecalendar = {
+    pname = "util_ai_mcp_googlecalendar";
+    version = "0.1.0";
+    propagatedBuildInputs = [
+      "mcp"
+      "pytest"
+      "google-api-python-client"
+      "google-auth"
+    ];
+    srcDir = "productivity/ai/mcp-servers/google-calendar";
+    libs = [ ];
+    scripts = [ "mcp_server_google_calendar.py" ];
     useUnstable = true;
     docker = true;
   };
