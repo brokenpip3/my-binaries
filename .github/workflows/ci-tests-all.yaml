@@ -18,10 +18,10 @@ jobs:
     outputs:
       matrix: ${{ steps.matrix.outputs.matrix }}
     steps:
-    - uses: DeterminateSystems/nix-installer-action@90bb610b90bf290cad97484ba341453bd1cbefea # v19
+    - uses: DeterminateSystems/nix-installer-action@786fff0690178f1234e4e1fe9b536e94f5433196 # v20
       with:
         diagnostic-endpoint: ""
-    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+    - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v4
     - id: matrix
       run: |
         nix flake show --json --all-systems | jq -cr '.packages."x86_64-linux" | keys' > _temp
@@ -38,10 +38,10 @@ jobs:
       matrix:
         test: ${{ fromJSON(needs.create-matrix.outputs.matrix) }}
     steps:
-    - uses: DeterminateSystems/nix-installer-action@90bb610b90bf290cad97484ba341453bd1cbefea # v19
+    - uses: DeterminateSystems/nix-installer-action@786fff0690178f1234e4e1fe9b536e94f5433196 # v20
       with:
         diagnostic-endpoint: ""
     - name: Check out code
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v4
     - name: Test ${{ matrix.test }}
       run: nix build -L .#${{ matrix.test }}
