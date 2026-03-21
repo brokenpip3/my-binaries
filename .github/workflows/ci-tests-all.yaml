@@ -7,7 +7,7 @@ concurrency:
 on:
   push:
     branches:
-      - main
+    - main
   pull_request:
     types: [opened, synchronize, ready_for_review, reopened]
 
@@ -18,9 +18,7 @@ jobs:
     outputs:
       matrix: ${{ steps.matrix.outputs.matrix }}
     steps:
-    - uses: DeterminateSystems/nix-installer-action@90bb610b90bf290cad97484ba341453bd1cbefea # v19
-      with:
-        diagnostic-endpoint: ""
+    - uses: NixOS/nix-installer-action@228d8a956062db04221c97c2794ea443194824aa
     - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
     - id: matrix
       run: |
@@ -38,9 +36,7 @@ jobs:
       matrix:
         test: ${{ fromJSON(needs.create-matrix.outputs.matrix) }}
     steps:
-    - uses: DeterminateSystems/nix-installer-action@90bb610b90bf290cad97484ba341453bd1cbefea # v19
-      with:
-        diagnostic-endpoint: ""
+    - uses: NixOS/nix-installer-action@228d8a956062db04221c97c2794ea443194824aa
     - name: Check out code
       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
     - name: Test ${{ matrix.test }}
