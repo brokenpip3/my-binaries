@@ -10,7 +10,7 @@ set_profile() {
     local profile_index="$1"
     local profile_name="$2"
     pw-cli s "$blueid" Profile "{ index: $profile_index, save: false }" &>/dev/null
-    notify-send "Bluetooth headset switched to profile $profile_name"
+    dunstify "Bluetooth headset switched to profile $profile_name"
 }
 
 if [[ "$1" == "music" ]]; then
