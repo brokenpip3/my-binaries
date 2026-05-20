@@ -18,8 +18,11 @@ jobs:
     outputs:
       matrix: ${{ steps.matrix.outputs.matrix }}
     steps:
-    - uses: NixOS/nix-installer-action@228d8a956062db04221c97c2794ea443194824aa
-    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+    - uses: NixOS/nix-installer-action@6b8548fe06acfb0155a50ab5d561accb215764cc
+      with:
+        extra-conf: |
+          experimental-features = nix-command flakes
+    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
     - id: matrix
       run: |
         nix flake show --json --all-systems | jq -cr '.packages."x86_64-linux" | keys' > _temp
@@ -36,8 +39,11 @@ jobs:
       matrix:
         test: ${{ fromJSON(needs.create-matrix.outputs.matrix) }}
     steps:
-    - uses: NixOS/nix-installer-action@228d8a956062db04221c97c2794ea443194824aa
+    - uses: NixOS/nix-installer-action@6b8548fe06acfb0155a50ab5d561accb215764cc
+      with:
+        extra-conf: |
+          experimental-features = nix-command flakes
     - name: Check out code
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
     - name: Test ${{ matrix.test }}
       run: nix build -L .#${{ matrix.test }}
