@@ -1,0 +1,64 @@
+name: Image-deploy
+
+concurrency:
+  group: image-deploy
+  cancel-in-progress: false
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  discover-docker-images:
+    runs-on: ubuntu-latest
+    outputs:
+      images: ${{ steps.discover.outputs.images }}
+    steps:
+      - uses: NixOS/nix-installer-action@6b8548fe06acfb0155a50ab5d561accb215764cc
+        with:
+          extra-conf: |
+            experimental-features = nix-command flakes
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - id: discover
+        run: |
+          IMAGES=$(nix flake show --json --all-systems | jq -c '[.packages."x86_64-linux" | keys[] | select(startswith("dockerimg_"))]')
+          echo "images=$IMAGES" >> "$GITHUB_OUTPUT"
+
+  build-and-push:
+    needs: [discover-docker-images]
+    if: ${{ needs.discover-docker-images.outputs.images != '[]' }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        image: ${{ fromJSON(needs.discover-docker-images.outputs.images) }}
+    steps:
+      - uses: NixOS/nix-installer-action@6b8548fe06acfb0155a50ab5d561accb215764cc
+        with:
+          extra-conf: |
+            experimental-features = nix-command flakes
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - name: Build docker image
+        run: nix build .#${{ matrix.image }}
+      - name: Extract package info
+        id: info
+        run: |
+          REAL_NAME="${{ matrix.image }}"
+          REAL_NAME="${REAL_NAME#dockerimg_}"
+          VERSION=$(nix eval --raw .#packages.x86_64-linux."$REAL_NAME".version)
+          SHORT_SHA="${GITHUB_SHA:0:7}"
+          echo "real_name=$REAL_NAME" >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "short_sha=$SHORT_SHA" >> "$GITHUB_OUTPUT"
+      - name: Push to GHCR
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+          docker load -i result
+          docker tag ghcr.io/brokenpip3/${{ steps.info.outputs.real_name }}:${{ steps.info.outputs.version }} \
+            ghcr.io/brokenpip3/${{ steps.info.outputs.real_name }}:${{ steps.info.outputs.version }}-${{ steps.info.outputs.short_sha }}
+          docker push --all-tags ghcr.io/brokenpip3/${{ steps.info.outputs.real_name }}
