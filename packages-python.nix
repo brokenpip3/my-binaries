@@ -88,7 +88,7 @@
 
   util_ai_mcp_taskwarrior = {
     pname = "util_ai_mcp_taskwarrior";
-    version = "0.1.1";
+    version = "0.1.2";
     propagatedBuildInputs = [
       "mcp"
       "pytest"
@@ -102,7 +102,7 @@
 
   util_ai_mcp_googlecalendar = {
     pname = "util_ai_mcp_googlecalendar";
-    version = "0.1.0";
+    version = "0.1.2";
     propagatedBuildInputs = [
       "mcp"
       "pytest"

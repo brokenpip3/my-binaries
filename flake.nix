@@ -34,7 +34,7 @@
                 p.bats-assert
               ]))
             ];
-            patchPhase = ''patchShebangs .'';
+            patchPhase = "patchShebangs .";
             doCheck = true;
             checkPhase = ''
               runHook preCheck
@@ -88,7 +88,7 @@
               pyWorld.pytest-asyncio
               pyWorld.pytest-cov
             ];
-            postFixup = ''rm $out/nix-support/propagated-build-inputs'';
+            postFixup = "rm $out/nix-support/propagated-build-inputs";
             checkPhase = ''
               runHook preCheck
               pytest -s -v; pytest --cov=. --cov-report=term-missing
@@ -122,8 +122,23 @@
                 name = "ghcr.io/brokenpip3/${name}";
                 tag = config.version;
                 created = "now";
-                copyToRoot = pythonPackages.${name};
+                copyToRoot = pkgs.buildEnv {
+                  name = "root";
+                  paths = [
+                    pythonPackages.${name}
+                    pkgs.bash
+                    pkgs.coreutils
+                  ];
+                  pathsToLink = [ "/bin" ];
+                };
+                runAsRoot = ''
+                  #!${pkgs.runtimeShell}
+                  ${pkgs.dockerTools.shadowSetup}
+                  groupadd -r mybin
+                  useradd -r -g mybin mybin
+                '';
                 config = {
+                  User = "mybin";
                   Labels = {
                     maintainer = "brokenpip3";
                     description = "docker image for ${name}";
