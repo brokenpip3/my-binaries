@@ -88,7 +88,7 @@
 
   util_ai_mcp_taskwarrior = {
     pname = "util_ai_mcp_taskwarrior";
-    version = "0.1.2";
+    version = "0.1.3";
     propagatedBuildInputs = [
       "mcp"
       "pytest"
@@ -102,7 +102,7 @@
 
   util_ai_mcp_googlecalendar = {
     pname = "util_ai_mcp_googlecalendar";
-    version = "0.1.2";
+    version = "0.1.3";
     propagatedBuildInputs = [
       "mcp"
       "pytest"
@@ -112,6 +112,21 @@
     srcDir = "productivity/ai/mcp-servers/google-calendar";
     libs = [ ];
     scripts = [ "mcp_server_google_calendar.py" ];
+    useUnstable = true;
+    docker = true;
+  };
+
+  util_ai_mcp_github = {
+    pname = "util_ai_mcp_github";
+    version = "0.1.1";
+    propagatedBuildInputs = [
+      "mcp"
+      "httpx"
+      "pytest"
+    ];
+    srcDir = "productivity/ai/mcp-servers/github";
+    libs = [ ];
+    scripts = [ "mcp_server_github.py" ];
     useUnstable = true;
     docker = true;
   };

@@ -313,4 +313,4 @@ if __name__ == "__main__":
     parser.add_argument("--port", type=int, default=8126)
     args = parser.parse_args()
 
-    uvicorn.run(mcp.streamable_http_app(), host="localhost", port=args.port)
+    uvicorn.run(mcp.streamable_http_app(), host="0.0.0.0", port=args.port)
