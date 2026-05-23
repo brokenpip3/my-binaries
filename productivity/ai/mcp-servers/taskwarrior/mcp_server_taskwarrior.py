@@ -416,7 +416,7 @@ if __name__ == "__main__":
         parser.add_argument("--port", type=int, default=8125, help="server port")
         args = parser.parse_args()
         uvicorn.run(
-            mcp.streamable_http_app, host="localhost", port=args.port, factory=True
+            mcp.streamable_http_app, host="0.0.0.0", port=args.port, factory=True
         )
     except Exception as e:
         logging.error(f"server startup failed: {e}")
