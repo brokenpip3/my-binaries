@@ -22,7 +22,7 @@ jobs:
       with:
         extra-conf: |
           experimental-features = nix-command flakes
-    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+    - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
     - id: matrix
       run: |
         nix flake show --json --all-systems | jq -cr '.packages."x86_64-linux" | keys' > _temp
@@ -44,6 +44,6 @@ jobs:
         extra-conf: |
           experimental-features = nix-command flakes
     - name: Check out code
-      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
     - name: Test ${{ matrix.test }}
       run: nix build -L .#${{ matrix.test }}
