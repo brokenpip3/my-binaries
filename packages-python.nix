@@ -66,6 +66,19 @@
     scripts = [ "tartufi.py" ];
   };
 
+  util_smtp2telegram = {
+    pname = "util_smtp2telegram";
+    version = "0.1.0";
+    propagatedBuildInputs = [
+      "aiosmtpd"
+      "python-telegram-bot"
+    ];
+    srcDir = "productivity/smtp2telegram";
+    libs = [ ];
+    scripts = [ "smtp2telegram.py" ];
+    docker = true;
+  };
+
   util_nix_doc_module = {
     pname = "util_nix_doc_module";
     version = "0.1.0";
