@@ -1,20 +1,20 @@
 repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: cef0300fd0fc4d2a87a85fa2093c6b283ea36f4b  # frozen: v5.0.0
+  rev: 3e8a8703264a2f4a69428a0aa4dcb512790b2c8c  # frozen: v6.0.0
   hooks:
   - id: end-of-file-fixer
   - id: trailing-whitespace
   - id: check-toml
 
 - repo: https://github.com/python-jsonschema/check-jsonschema
-  rev: 828a213a1dd17aa9862aab706e3162c13281ff93  # frozen: 0.31.2
+  rev: c4654a7e007c9619a5eb63c39a456572a0fa1851  # frozen: 0.38.0
   hooks:
     - id: check-dependabot
     - id: check-github-workflows
       args: ["--verbose"]
 
 - repo: https://github.com/astro/deadnix
-  rev: d07b548c7bda50a4bfce071e900e5c871b90f832  # frozen: v1.3.0
+  rev: ba988ddf46f1e57abe3dfacbfbd17fec5a7276d9  # frozen: v1.3.2
   hooks:
     - id: deadnix
 
