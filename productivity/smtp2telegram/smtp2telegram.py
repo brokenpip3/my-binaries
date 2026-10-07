@@ -55,7 +55,7 @@ def strip_html(text: str) -> str:
     cleaned = re.sub(r"\n{3,}", "\n\n", raw)
     return unescape(cleaned).strip()
 
-_MD_V2_ESCAPE_RE = re.compile(r"([_*\[\]()~`>#+\-=|{}.!])")
+_MD_V2_ESCAPE_RE = re.compile(r"([\\_*\[\]()~`>#+\-=|{}.!])")
 
 
 def escape_markdown_v2(text: str) -> str:
@@ -137,7 +137,7 @@ class SmtpHandler:
             msg = _email.message_from_bytes(envelope.content, policy=_email_policy)
         except Exception:
             logger.exception("failed to parse email")
-            return "250 OK"
+            return "550 5.6.0 Could not parse message"
 
         mail_from = envelope.mail_from or msg.get("From", "")
         subject = msg.get("Subject", "(no subject)")
@@ -150,6 +150,7 @@ class SmtpHandler:
             except Exception:
                 logger.exception("html stripping failed, using raw body")
 
+        delivery_failed = False
         for to_addr in envelope.rcpt_tos:
             chat_id = resolve_recipient(self._routing, to_addr)
             if chat_id is None:
@@ -166,9 +167,13 @@ class SmtpHandler:
                 )
                 await self._sender.send(chat_id, text)
             except Exception:
+                delivery_failed = True
                 logger.exception(
                     "telegram send failed (subject=%r, chat_id=%s)", subject, chat_id
                 )
+
+        if delivery_failed:
+            return "451 4.3.0 Temporary Telegram delivery failure"
 
         return "250 OK"
 

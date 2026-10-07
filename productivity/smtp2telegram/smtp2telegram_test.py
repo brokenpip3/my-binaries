@@ -110,6 +110,9 @@ class TestEscapeMarkdownV2:
     def test_plain_text_unchanged(self):
         assert s2t.escape_markdown_v2("forza juve") == "forza juve"
 
+    def test_escapes_backslash(self):
+        assert s2t.escape_markdown_v2(r"mail\box") == r"mail\\box"
+
     def test_all_special_chars(self):
         result = s2t.escape_markdown_v2("_*[]()~`>#+-=|{}.!")
         for ch in "_*[]()~`>#+-=|{}.!":
@@ -346,7 +349,18 @@ class TestSmtpHandler:
             mock_sender.send.side_effect = Exception("Telegram API error")
             envelope = self._make_envelope(rcpt_tos=["delpiero@juventus.com"])
             result = await handler.handle_DATA(None, None, envelope)
-            assert "250" in result
+            assert result == "451 4.3.0 Temporary Telegram delivery failure"
+
+        asyncio.run(_run())
+
+    def test_handle_data_parse_error(self, handler):
+        import asyncio
+
+        async def _run():
+            envelope = self._make_envelope()
+            with patch("smtp2telegram._email.message_from_bytes", side_effect=ValueError):
+                result = await handler.handle_DATA(None, None, envelope)
+            assert result == "550 5.6.0 Could not parse message"
 
         asyncio.run(_run())
 
