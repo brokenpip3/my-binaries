@@ -16,3 +16,8 @@ updates:
       python:
         patterns:
           - "*"
+
+  - package-ecosystem: "nix"
+    directory: "/"
+    schedule:
+      interval: "weekly"
