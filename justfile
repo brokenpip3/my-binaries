@@ -55,6 +55,7 @@ build-productivity:
     nix build -L .#util_run_all
     nix build -L .#util_ai_mcp_taskwarrior
     nix build -L .#util_ai_mcp_googlecalendar
+    nix build -L .#util_smtp2telegram
 
 # Build category system
 build-system:
